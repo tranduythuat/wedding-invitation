@@ -1,0 +1,31 @@
+@use '../abstracts' as *;
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+
+  @include respond(md) {
+    gap: 24px;
+  }
+
+  &__item {
+    min-width: 68px;
+    padding: 14px 8px;
+    background: $color-paper;
+    border-radius: $radius;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  }
+
+  &__value {
+    display: block;
+    font-family: $font-heading;
+    font-size: 1.9rem;
+    line-height: 1.1;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    color: $color-accent;
+  }
+}

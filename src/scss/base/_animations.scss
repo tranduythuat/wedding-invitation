@@ -1,0 +1,12 @@
+// Phần tử có data-anim ẩn sẵn, JS (modules/reveal.js) sẽ chạy animation khi cuộn tới.
+// Class `js` được thêm vào <html> bởi main.js nên nếu JS lỗi, nội dung vẫn hiển thị.
+.js [data-anim] {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-anim] {
+    opacity: 1;
+  }
+}

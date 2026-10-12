@@ -1,0 +1,21 @@
+@use '../abstracts' as *;
+
+.gallery {
+  --swiper-theme-color: #{$color-accent};
+  --swiper-navigation-size: 24px;
+  max-width: $container;
+  margin-inline: auto;
+  padding-bottom: 36px;
+
+  .swiper-slide {
+    aspect-ratio: 4 / 5;
+    border-radius: $radius;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Thiệp mời cưới</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+
+<body>
+  <!-- Bì thư mở đầu -->
+  <section class="envelope-page" data-module="envelope">
+    <div class="envelope-page__wrap">
+      <div class="envelope" tabindex="0" role="button" aria-label="Mở thiệp">
+        <img class="envelope__layer envelope__back" src="assets/images/envelope-back.png" alt="">
+        <div class="envelope__card"><img src="assets/images/card-inside.png" alt=""></div>
+        <img class="envelope__layer envelope__front" src="assets/images/envelope-front.png" alt="">
+        <div class="envelope__flap"><img src="assets/images/envelope-flap.png" alt=""></div>
+        <img class="envelope__seal" src="assets/images/wax-seal.png" alt="">
+      </div>
+      <div class="envelope__hint">Chạm để mở thiệp</div>
+    </div>
+  </section>
+
+  <main data-module="reveal">
+    <section class="section section--hero section--alt">
+      <p class="script" data-anim="fade-in">Trân trọng kính mời</p>
+      <h1 data-anim="fade-up" data-delay="150">Ngọc Anh &amp; Minh Khôi</h1>
+      <p data-anim="fade-up" data-delay="300">10:00 · 20 tháng 12, 2026</p>
+    </section>
+
+    <section class="section">
+      <h2 data-anim="fade-up">Còn lại</h2>
+      <div class="countdown" data-module="countdown" data-anim="fade-up" data-delay="150">
+        <div class="countdown__item"><span class="countdown__value" data-unit="days">0</span><span
+            class="countdown__label">Ngày</span></div>
+        <div class="countdown__item"><span class="countdown__value" data-unit="hours">00</span><span
+            class="countdown__label">Giờ</span></div>
+        <div class="countdown__item"><span class="countdown__value" data-unit="minutes">00</span><span
+            class="countdown__label">Phút</span></div>
+        <div class="countdown__item"><span class="countdown__value" data-unit="seconds">00</span><span
+            class="countdown__label">Giây</span></div>
+      </div>
+    </section>
+
+    <section class="section section--alt">
+      <h2 data-anim="fade-up">Khoảnh khắc của chúng mình</h2>
+      <div class="swiper gallery" data-module="slider" data-anim="fade-in" data-delay="150">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="assets/images/gallery/placeholder-1.svg" alt="Ảnh cưới 1"></div>
+          <div class="swiper-slide"><img src="assets/images/gallery/placeholder-2.svg" alt="Ảnh cưới 2"></div>
+          <div class="swiper-slide"><img src="assets/images/gallery/placeholder-3.svg" alt="Ảnh cưới 3"></div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 data-anim="fade-up">Thời gian &amp; địa điểm</h2>
+        <p data-anim="fade-up" data-delay="150">Lễ thành hôn lúc 10:00, Chủ nhật 20/12/2026</p>
+        <p data-anim="fade-up" data-delay="250">Nhà hàng Ví Dụ, 123 Đường Mẫu, Đà Nẵng</p>
+      </div>
+    </section>
+
+    <section class="section section--alt">
+      <div class="container">
+        <h2 data-anim="fade-up">Xác nhận tham dự</h2>
+        <form class="rsvp" data-module="rsvp" data-anim="fade-up" data-delay="150" novalidate>
+          <div class="field">
+            <label for="rsvp-name">Họ và tên</label>
+            <input id="rsvp-name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <fieldset class="field">
+            <legend>Bạn có tham dự không?</legend>
+            <label class="choice"><input type="radio" name="attendance" value="yes"> Tôi sẽ tham dự</label>
+            <label class="choice"><input type="radio" name="attendance" value="no"> Rất tiếc, tôi không thể</label>
+          </fieldset>
+          <div class="field">
+            <label for="rsvp-guests">Số người tham dự</label>
+            <input id="rsvp-guests" name="guests" type="number" min="1" max="10" value="1">
+          </div>
+          <div class="field">
+            <label for="rsvp-message">Lời chúc</label>
+            <textarea id="rsvp-message" name="message" rows="3"></textarea>
+          </div>
+          <input class="hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn" type="submit">Gửi xác nhận</button>
+          <p class="rsvp__status" data-el="status" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <footer class="footer">Cảm ơn bạn đã dành thời gian cho chúng mình.</footer>
+  </main>
+
+  <script src="https://unpkg.com/animejs@4.5.0/dist/bundles/anime.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.js"></script>
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+
+</html>

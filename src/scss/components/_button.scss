@@ -1,0 +1,23 @@
+@use '../abstracts' as *;
+
+.btn {
+  display: inline-block;
+  padding: 12px 32px;
+  border: 0;
+  border-radius: 999px;
+  background: $color-accent;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  @include focus-ring;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

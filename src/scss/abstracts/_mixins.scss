@@ -1,0 +1,22 @@
+@use 'sass:map';
+@use 'variables' as *;
+
+// @include respond(md) { ... }  => min-width
+@mixin respond($bp) {
+  @media (min-width: map.get($breakpoints, $bp)) {
+    @content;
+  }
+}
+
+@mixin center-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin focus-ring {
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: 3px;
+  }
+}

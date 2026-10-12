@@ -1,0 +1,33 @@
+@use '../abstracts' as *;
+
+.container {
+  width: 100%;
+  max-width: $container;
+  margin-inline: auto;
+}
+
+.section {
+  padding: 72px 24px;
+  text-align: center;
+
+  @include respond(md) {
+    padding: 96px 24px;
+  }
+
+  &--alt {
+    background: linear-gradient(160deg, $color-bg, $color-bg-alt);
+  }
+
+  &--hero {
+    min-height: 100dvh;
+    @include center-flex;
+    flex-direction: column;
+  }
+}
+
+.footer {
+  padding: 40px 24px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: $color-accent;
+}

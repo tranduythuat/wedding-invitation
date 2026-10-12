@@ -1,0 +1,96 @@
+@use '../abstracts' as *;
+
+.envelope-page {
+  position: fixed;
+  inset: 0;
+  z-index: $z-envelope;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, $color-bg, $color-bg-alt);
+  overflow: hidden;
+
+  &.is-hidden {
+    display: none;
+  }
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+}
+
+.envelope {
+  position: relative;
+  width: min(420px, 86vw);
+  height: min(280px, 57vw);
+  perspective: 1200px;
+  cursor: pointer;
+
+  &__layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__back {
+    z-index: 1;
+  }
+
+  // Thiệp nằm giữa: dùng inset thay cho transform để anime.js toàn quyền điều khiển transform
+  &__card {
+    position: absolute;
+    inset: 10px 0 -10px;
+    z-index: 2;
+    @include center-flex;
+
+    img {
+      width: 78%;
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.15));
+    }
+  }
+
+  &__front {
+    z-index: 3;
+  }
+
+  &__flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 53.6%;
+    z-index: 4;
+    transform-origin: top center;
+    transform-style: preserve-3d;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    &.is-behind {
+      z-index: 0;
+    }
+  }
+
+  // Căn giữa bằng margin âm (không dùng transform để tránh xung đột với anime.js)
+  &__seal {
+    --size: 64px;
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    z-index: 5;
+    width: var(--size);
+    margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+  }
+
+  &__hint {
+    font-family: $font-heading;
+    font-style: italic;
+    color: $color-accent;
+  }
+}

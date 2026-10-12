@@ -1,0 +1,24 @@
+// Màu sắc
+$color-text: #3a2e2a;
+$color-accent: #8b5e63;
+$color-bg: #fbf7f2;
+$color-bg-alt: #f1e5d8;
+$color-paper: #fff8ee;
+$color-error: #b3261e;
+$color-success: #2e6b4f;
+
+// Font
+$font-heading: 'Playfair Display', serif;
+$font-body: Montserrat, sans-serif;
+
+// Layout
+$container: 720px;
+$radius: 12px;
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 1024px,
+);
+
+// Z-index
+$z-envelope: 100;

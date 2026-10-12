@@ -1,0 +1,64 @@
+@use '../abstracts' as *;
+
+.rsvp {
+  max-width: 480px;
+  margin-inline: auto;
+  text-align: left;
+
+  .field {
+    margin: 0 0 18px;
+    padding: 0;
+    border: 0;
+  }
+
+  label,
+  legend {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+  }
+
+  input[type='text'],
+  input[type='number'],
+  textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid rgba($color-text, 0.2);
+    border-radius: 8px;
+    background: #fff;
+    font: inherit;
+    @include focus-ring;
+  }
+
+  .choice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  // Honeypot chống bot
+  .hp {
+    position: absolute;
+    left: -9999px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  &__status {
+    min-height: 1.5em;
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+
+    &[data-state='error'] {
+      color: $color-error;
+    }
+
+    &[data-state='success'] {
+      color: $color-success;
+    }
+  }
+}
