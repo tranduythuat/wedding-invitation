@@ -1,5 +1,12 @@
 @use '../abstracts' as *;
 
+main {
+  max-width: $main-width;
+  margin-inline: auto;
+  overflow-x: clip; // tránh animation fade-left/right gây cuộn ngang
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
 .container {
   width: 100%;
   max-width: $container;

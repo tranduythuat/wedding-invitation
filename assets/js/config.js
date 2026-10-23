@@ -13,7 +13,7 @@ export default {
   // Thời lượng (ms) từng bước mở bì thư
   envelope: {
     hint: 250,
-    seal: 850,
+    seal: 1000,
     flap: 1800,
     card: 1500,
     gap: 0,

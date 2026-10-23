@@ -1,17 +1,19 @@
 // Màu sắc
 $color-text: #3a2e2a;
 $color-accent: #8b5e63;
-$color-bg: #fbf7f2;
+$color-bg: #fffcf9;
 $color-bg-alt: #f1e5d8;
-$color-paper: #fff8ee;
+$color-paper: #fffcf8;
 $color-error: #b3261e;
 $color-success: #2e6b4f;
 
 // Font
-$font-heading: 'Playfair Display', serif;
+$font-heading: "Mea Culpa", cursive;
+$font-text: "Cormorant Upright", serif;
 $font-body: Montserrat, sans-serif;
 
 // Layout
+$main-width: 540px;
 $container: 720px;
 $radius: 12px;
 $breakpoints: (

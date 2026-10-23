@@ -1,4 +1,5 @@
 // abstracts (biến + mixin) được @use trong từng partial
+@use 'base/fonts';
 @use 'base/reset';
 @use 'base/typography';
 @use 'base/animations';

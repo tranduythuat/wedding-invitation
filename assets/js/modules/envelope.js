@@ -11,6 +11,7 @@ export default function envelope(root) {
   const card = qs('.envelope__card', root);
   const seal = qs('.envelope__seal', root);
   const hint = qs('.envelope__hint', root);
+  const shadow = qs('.envelope__flap-shadow', root);
   let opening = false;
 
   document.documentElement.dataset.state = 'locked';
@@ -37,8 +38,27 @@ export default function envelope(root) {
           if (self.progress > 0.51) flap.classList.add('is-behind');
         },
       })
-      .add(card, { translateY: [0, -170], duration: cfg.card, ease: 'outCubic' }, `+=${cfg.gap}`)
-      .add(env, { scale: [1, 1.06], opacity: [1, 0], duration: cfg.exit, ease: 'inCubic' }, '+=250')
+      .add(shadow, {
+        translateY: [0, 16],   // nắp nhấc lên nên bóng lan xa dần
+        scaleY: [1, 0.4],      // co lại theo phối cảnh
+        opacity: [0.35, 0],    // tắt hẳn khi nắp dựng thẳng (~90°)
+        duration: 1400,
+        ease: 'inOutCubic',
+      }, '<<')
+      .add(card, {
+        translateY: [0, -280],
+        duration: cfg.card,
+        ease: 'outCubic',
+        onComplete: () => {
+          card.classList.add('is-front');
+        },
+      })
+      .add(card, {
+        translateY: [-280, -80],
+        duration: 1000,
+        ease: 'inOutSine',
+      }, '+=100')
+      .add(env, { scale: [1, 1.06], opacity: [1, 0], duration: cfg.exit, ease: 'inCubic' }, '+=1500')
       .add(root, { opacity: [1, 0], duration: 350, ease: 'outQuad' });
   }
 

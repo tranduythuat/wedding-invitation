@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Thiệp mời cưới – Hiệu ứng viền (phiên bản 2)</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=Montserrat:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: Montserrat, sans-serif;
+            background: #5f7068;
+            color: #e8cf9a;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .hero {
+            position: relative;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            overflow: hidden;
+        }
+
+        .frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: min(86vw, 380px);
+            aspect-ratio: 300 / 520;
+            translate: -50% -50%;
+            pointer-events: none;
+        }
+
+        .frame svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .frame .ring {
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .content>* {
+            opacity: 0;
+        }
+
+        .eyebrow,
+        .invite {
+            font-size: .68rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .names {
+            font-family: "Playfair Display", serif;
+            font-style: italic;
+            font-weight: 500;
+            font-size: clamp(2.4rem, 9vw, 3.4rem);
+            line-height: 1.1;
+            margin: 28px 0;
+        }
+
+        .names small {
+            display: block;
+            font-size: .9rem;
+            margin: 4px 0;
+            opacity: .8;
+        }
+
+        .switcher {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            translate: -50% 0;
+            z-index: 2;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: max-content;
+            max-width: 94vw;
+        }
+
+        .switcher button {
+            padding: 9px 16px;
+            border: 1px solid rgba(232, 207, 154, .6);
+            border-radius: 999px;
+            background: rgba(0, 0, 0, .15);
+            color: #e8cf9a;
+            font: inherit;
+            font-size: .8rem;
+            cursor: pointer;
+        }
+
+        .switcher button:hover {
+            background: rgba(232, 207, 154, .18);
+        }
+
+        .switcher button[aria-pressed="true"] {
+            background: #e8cf9a;
+            color: #3d4a43;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="hero">
+        <div class="frame" aria-hidden="true"><svg viewBox="0 0 300 520" fill="none"></svg></div>
+
+        <div class="content">
+            <p class="eyebrow">Trân trọng kính mời</p>
+            <h1 class="names">Ngọc Anh <small>và</small> Minh Khôi</h1>
+            <p class="invite">10:00 · 20 tháng 12, 2026</p>
+        </div>
+    </section>
+
+    <div class="switcher" role="group" aria-label="Chọn hiệu ứng">
+        <button type="button" data-variant="bloom" aria-pressed="true">1 · Nở ra + ánh kim</button>
+        <button type="button" data-variant="comet" aria-pressed="false">2 · Sao chổi chạy viền</button>
+        <button type="button" data-variant="draw" aria-pressed="false">3 · Vẽ nét</button>
+    </div>
+
+    <script src="https://unpkg.com/animejs@4.5.0/dist/bundles/anime.umd.min.js"></script>
+    <script>
+        const SOURCES = [
+            'https://cdn.jsdelivr.net/npm/animejs@4.0.2/dist/bundles/anime.umd.min.js',
+            'https://unpkg.com/animejs@4.0.2/dist/bundles/anime.umd.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/animejs/4.0.2/anime.umd.min.js',
+        ];
+        const getLib = () => window.anime || window.animejs;
+
+        function loadAnime(i = 0) {
+            return new Promise((resolve, reject) => {
+                if (getLib()) return resolve(getLib());
+                if (i >= SOURCES.length) return reject(new Error('Không tải được anime.js từ CDN nào. Kiểm tra kết nối mạng.'));
+                const el = document.createElement('script');
+                el.src = SOURCES[i];
+                el.onload = () => (getLib() ? resolve(getLib()) : loadAnime(i + 1).then(resolve, reject));
+                el.onerror = () => loadAnime(i + 1).then(resolve, reject);
+                document.head.appendChild(el);
+            });
+        }
+
+        loadAnime().then(init).catch((err) => {
+            console.error(err);
+            document.querySelector('.frame svg').innerHTML = markup('plain');
+            document.querySelectorAll('.content > *').forEach((el) => (el.style.opacity = 1));
+        });
+
+        // ---------- SVG ----------
+        const RINGS = [
+            { x: 8, y: 8, w: 284, h: 504, sw: 2.5 },
+            { x: 18, y: 18, w: 264, h: 484, sw: 1.2 },
+        ];
+
+        // Ánh kim: dải sáng nằm giữa gradient, JS dịch x1/x2 để quét qua viền
+        const GRADIENTS = `
+      <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#f3dfa2"/><stop offset=".35" stop-color="#c9a45c"/>
+        <stop offset=".65" stop-color="#f0d58a"/><stop offset="1" stop-color="#b08a45"/>
+      </linearGradient>
+      <linearGradient id="sweep" gradientUnits="userSpaceOnUse" x1="-195" y1="-338" x2="105" y2="182">
+        <stop offset="0" stop-color="#c9a45c"/><stop offset=".38" stop-color="#d8b46a"/>
+        <stop offset=".5" stop-color="#fff6cf"/>
+        <stop offset=".62" stop-color="#d8b46a"/><stop offset="1" stop-color="#c9a45c"/>
+      </linearGradient>`;
+
+        function rect(r, cls, stroke, extra = '') {
+            return `<rect class="${cls}" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${r.w / 2}"
+        stroke="${stroke}" stroke-width="${r.sw}" ${extra}/>`;
+        }
+
+        function markup(variant) {
+            let body = '';
+            if (variant === 'bloom') {
+                body = RINGS.map((r) => rect(r, 'ring', 'url(#sweep)', 'style="opacity:0"')).join('');
+            } else if (variant === 'comet') {
+                // Viền nền mờ + đoạn sáng chạy quanh (pathLength=1 để dasharray tính theo %)
+                body = RINGS.map((r) => rect(r, 'ring base', 'url(#gold)', 'style="opacity:.35"')).join('')
+                    + RINGS.map((r) => rect({ ...r, sw: r.sw + .6 }, 'ring comet', '#fff3c4',
+                        'pathLength="1" stroke-linecap="round" stroke-dasharray="0.14 0.86" stroke-dashoffset="0" style="opacity:0;filter:drop-shadow(0 0 4px rgba(255,236,160,.9))"')).join('');
+            } else if (variant === 'draw') {
+                body = RINGS.map((r) => rect(r, 'ring', 'url(#gold)', 'style="opacity:0"')).join('');
+            } else {
+                body = RINGS.map((r) => rect(r, 'ring', 'url(#gold)')).join('');
+            }
+            return `<defs>${GRADIENTS}</defs>${body}`;
+        }
+
+        // ---------- Animation ----------
+        function init(lib) {
+            const { animate, stagger, svg } = lib;
+            const art = document.querySelector('.frame svg');
+            const texts = [...document.querySelectorAll('.content > *')];
+            const buttons = [...document.querySelectorAll('.switcher button')];
+            const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+            let anims = [];
+            let run = 0;
+
+            const track = (a) => (anims.push(a), a);
+            const q = (sel) => [...art.querySelectorAll(sel)];
+
+            function textIn(delay = 0) {
+                track(animate(texts, {
+                    opacity: [0, 1], translateY: [24, 0],
+                    duration: 900, delay: stagger(180, { start: delay }), ease: 'outCubic',
+                }));
+            }
+
+            const variants = {
+                // 1) Hai viền nở với biên độ khác nhau, mỗi viền nảy ngẫu nhiên 2 nhịp rồi dừng;
+                //    sau đó dải sáng quét chéo liên tục, mượt (linear, không dừng giữa các lần lặp)
+                bloom() {
+                    const rand = (a, b) => a + Math.random() * (b - a);
+                    const rings = q('.ring'); // [0] = viền ngoài, [1] = viền trong
+                    const cfg = [
+                        { from: rand(0.72, 0.82), delay: 380, grow: 800 }, // ngoài: nở ít, chậm hơn
+                        { from: rand(0.30, 0.45), delay: 0, grow: 650 }, // trong: nở nhiều, nhanh hơn
+                    ];
+                    rings.forEach((ring, i) => {
+                        const c = cfg[i];
+                        const over1 = 1 + rand(0.05, 0.12);   // nảy lần 1
+                        const under = 1 - rand(0.025, 0.055); // co lại
+                        const over2 = 1 + rand(0.01, 0.028);  // nảy lần 2 (nhỏ hơn)
+                        track(animate(ring, {
+                            opacity: { from: 0, to: 1, duration: 450 },
+                            scale: [
+                                { from: c.from, to: over1, duration: c.grow, ease: 'outCubic' },
+                                { to: under, duration: c.grow, ease: 'inOutSine' },
+                                { to: over2, duration: c.grow, ease: 'outSine' },
+                                { to: 1, duration: rand(180, 240), ease: 'outSine' }, // dừng hẳn
+                            ],
+                            delay: c.delay,
+                        }));
+                    });
+                    const grad = art.querySelector('#sweep');
+                    track(animate(grad, {
+                        x1: [-195, 195], y1: [-338, 338],
+                        x2: [105, 495], y2: [182, 858],
+                        duration: 2600, delay: 2200, loop: true, ease: 'linear',
+                    }));
+                    textIn(900);
+                },
+
+                // 2) Viền nền hiện mờ, hai đoạn sáng chạy ngược chiều nhau quanh hai viền
+                comet() {
+                    track(animate(q('.base'), { opacity: [0, .35], duration: 1000, delay: stagger(250) }));
+                    const comets = q('.comet');
+                    comets.forEach((c, i) => {
+                        c.style.opacity = 1;
+                        track(animate(c, {
+                            strokeDashoffset: i === 0 ? [0, -1] : [0, 1], // viền ngoài chạy xuôi, viền trong chạy ngược
+                            duration: 3600 + i * 600, loop: true, ease: 'linear',
+                        }));
+                    });
+                    textIn(500);
+                },
+
+                // 3) Vẽ nét lần lượt từng viền, rồi phát sáng nhẹ
+                draw() {
+                    track(animate(svg.createDrawable(q('.ring')), {
+                        draw: ['0 0', '0 1'],
+                        opacity: { from: 0, to: 1, duration: 200 },
+                        duration: 2200, delay: stagger(450), ease: 'inOutQuad',
+                        onComplete: () => track(animate(art, {
+                            filter: ['drop-shadow(0 0 0px rgba(240,213,138,0))', 'drop-shadow(0 0 8px rgba(240,213,138,.65))'],
+                            duration: 2400, ease: 'inOutSine', alternate: true, loop: true,
+                        })),
+                    }));
+                    textIn(1200);
+                },
+            };
+
+            function play(name) {
+                const id = ++run;
+                anims.forEach((a) => { try { a.revert(); } catch { } });
+                anims = [];
+                art.style.filter = '';
+                art.innerHTML = markup(reduced ? 'plain' : name); // dựng lại SVG để sạch trạng thái cũ
+                texts.forEach((el) => { el.style.opacity = reduced ? 1 : 0; el.style.transform = ''; });
+                if (reduced || id !== run) return;
+                variants[name]();
+                buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.variant === name)));
+            }
+
+            buttons.forEach((b) => b.addEventListener('click', () => play(b.dataset.variant)));
+            play('bloom');
+        }
+    </script>
+</body>
+
+</html>

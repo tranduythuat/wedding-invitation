@@ -17,3 +17,4 @@ npm run serve          # mở bằng server local (ES modules không chạy đư
 
 Giao tiếp giữa module: `emit('event')` / `on('event', fn)` trong `core/events.js`.
 Animation mới: `registerPreset('ten', { ...props anime.js })` rồi dùng `data-anim="ten"`.
+npx sass --watch src/scss/main.scss:assets/css/main.css
